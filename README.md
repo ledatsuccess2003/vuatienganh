@@ -88,3 +88,18 @@ Framework Vite. Build: npm run validate && npm run build. Output: dist. Producti
 ## Giới hạn kiểm chứng
 
 Test tự động xác minh scheduling, lưu tiến độ, đáp án, hoàn thành game, PWA offline và kích thước viewport. Không thay thế thử nghiệm micro/âm thanh trên iPhone/iPad/Android thật hay thẩm định ngôn ngữ 3.000 mục bởi giáo viên.
+
+
+## E-book A: lộ trình và bộ nhớ riêng
+
+- Truy cập: https://vuatienganh.vercel.app/#ebook-a
+- Nguồn do chủ website cung cấp: `ebook-khoa-hoc-ielts-vocabulary.pdf`, IELTS Vocabulary — IELTS Nguyễn Huyền, 114 trang.
+- `public/ebook-a.json`: 826 mục theo thứ tự sách, gồm 300 cụm chính (20 cụm × 15 chủ đề) và 526 mục học thêm. Giữ mục lặp theo ngữ cảnh, số trang, ví dụ song ngữ và ghi chú các lỗi nguồn đã sửa. Đây là các đầu mục từ vựng của phần lý thuyết, không phải danh sách mọi từ đơn xuất hiện trong các câu của PDF. Bài luyện tương tác được tạo từ từ đã học, không phải bản sao các trang bài tập giấy.
+- Chỉ nút xác nhận đã học mới mở khóa mục kế tiếp và đưa mục vào nhóm ôn. Ghi chú hoặc yêu thích không tự đánh dấu đã học. Câu hỏi, phương án nhiễu và cặp ghép đều lấy từ nhóm đã học; không dùng kho 3.000 từ làm nhiễu cho e-book.
+- 6 cách ôn: flashcards, chọn nghĩa, chọn tiếng Anh, viết nghĩa, điền tiếng Anh, ghép cặp. Bài viết cho tự đối chiếu để tránh chấm sai các bản dịch tương đương. Đánh giá cập nhật lịch SRS; chưa nhớ ôn lại sau 10 phút.
+- IndexedDB `vua-english-ebook-a` có hai object stores `cards` và `events`. Lưu thẻ và lịch sử bằng một giao dịch; chỉ chuyển bài khi ghi thành công. Lịch sử không tự cắt bỏ, UI tải thêm từng 30 mục. Ghi chú được lưu khi nhấn nút lưu hoặc xác nhận học và tiếp tục. Bản sao JSON chứa toàn bộ thẻ và lịch sử, nhập hợp nhất theo ID và thời điểm cập nhật, không lặp sự kiện.
+- Bộ nhớ khác nhau theo thiết bị, trình duyệt và origin; GitHub Pages và Vercel không chung dữ liệu. Có nút yêu cầu persistent storage; trình duyệt quyết định cấp quyền. Xóa dữ liệu trình duyệt vẫn xóa tiến độ, vì vậy cần xuất bản sao định kỳ. Không có đồng bộ máy chủ hay tài khoản. Lịch sử chỉ tăng theo hoạt động thật, không làm tăng dữ liệu nhân tạo.
+- E-book được cache để học ngoại tuyến sau lần tải thành công. Giọng đọc phụ thuộc giọng có sẵn trên thiết bị, có thể cần mạng tùy giọng.
+- Sách không có IPA. IPA bổ sung từ open-dict-data/ipa-dict, trình bày theo từng từ với giọng UK/US khi nguồn có, không ghép giả thành phiên âm nối âm. Không khẳng định thẩm định 100% mọi phát âm/nghĩa. Các lỗi nguồn rõ ràng được ghi chú ngay trong bài.
+
+Tái tạo dữ liệu: `python scripts/import-ebook.py <đường-dẫn-PDF>` (pypdf; các tệp IPA nằm trong data-source theo hướng dẫn trên). SHA-256 của PDF được lưu trong JSON. Không đưa tệp PDF gốc lên repo. Nội dung e-book được nhập theo yêu cầu chủ website; không gán giấy phép CC BY-SA của từ điển hoặc MIT của code cho sách của tác giả. Giấy phép IPA tiếp tục nằm trong `public/IPA-LICENSE.txt`.
