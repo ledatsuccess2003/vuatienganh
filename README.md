@@ -60,6 +60,14 @@ Chạy python scripts/build-data.py. Bộ tạo yêu cầu đủ 3.000 từ th�
 
 SpeechSynthesis dùng giọng của thiết bị, không có API trả phí. Nếu không có giọng tiếng Anh, app hiển thị hướng dẫn. Ghi âm cần HTTPS hoặc localhost và quyền micro; file chỉ ở bộ nhớ thiết bị. SpeechRecognition có thể sử dụng dịch vụ trình duyệt, không phải chấm âm vị hay điểm IELTS. Nhắc học khi đóng app dựa vào ứng dụng Lịch, không có máy chủ push. Không có đăng nhập hay đồng bộ đám mây.
 
+## Website miễn phí trên GitHub Pages
+
+Link học: https://ledatsuccess2003.github.io/vuatienganh/
+
+Workflow .github/workflows/pages.yml kiểm tra dữ liệu, chạy test, build với SITE_BASE=/vuatienganh/ và xuất bản tự động khi push main. HTTPS và tên miền con do GitHub cung cấp. Đây là hosting frontend tĩnh; toàn bộ chức năng học hiện tại chạy trong trình duyệt, không cần backend. Tiến độ vẫn lưu trên từng thiết bị, có xuất/nhập để sao lưu.
+
+GitHub Pages không chạy backend. Khi cần đăng nhập/đồng bộ, có thể triển khai cùng code lên Vercel hoặc Cloudflare Workers và thêm dịch vụ API/database phù hợp; chưa cấu hình backend trong bản hiện tại.
+
 ## GitHub → Vercel
 
 Import repository vào Vercel hoặc chạy Vercel CLI, rồi kết nối Git:

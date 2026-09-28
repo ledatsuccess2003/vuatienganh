@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 import fs from 'node:fs';
 const words=JSON.parse(fs.readFileSync('public/vocabulary.json','utf8'));
 const wordMap=new Map(words.map(w=>[w.word,w]));
-test.beforeEach(async({page})=>{await page.goto('/');await expect(page.getByRole('button',{name:'Bắt đầu phiêu lưu'})).toBeVisible();});
+test.beforeEach(async({page})=>{await page.goto('./');await expect(page.getByRole('button',{name:'Bắt đầu phiêu lưu'})).toBeVisible();});
 test('adventure grades correct answers, awards XP, persists cards and unlocks next stage',async({page})=>{
  await page.getByRole('button',{name:'Bắt đầu phiêu lưu'}).click();
  for(let i=0;i<10;i++){const word=await page.locator('.quiz-word').textContent();const meaning=wordMap.get(word).meaning;await page.locator('.quiz-options button').filter({hasText:meaning}).first().click();await expect(page.getByText('Chính xác! +10 XP')).toBeVisible();await page.getByRole('button',{name:i===9?'Xem kết quả':'Tiếp theo',exact:true}).click();}
