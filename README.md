@@ -2,6 +2,14 @@
 
 Ứng dụng React/Vite dành cho người học Việt Nam, tập trung vào trò chơi và ôn tập từ vựng. Dự án riêng, không thay đổi website Trung/Nhật/Hàn đang có.
 
+## Website đang chạy
+
+- Vercel production: https://vuatienganh.vercel.app/
+- GitHub Pages: https://ledatsuccess2003.github.io/vuatienganh/
+- Mã nguồn: https://github.com/ledatsuccess2003/vuatienganh
+
+Vercel đã kết nối repository, nhánh production main, dự án Dat/vuatienganh. Push main tự tạo deployment mới. Website công khai qua HTTPS, không yêu cầu tài khoản Vercel để học.
+
 ## Tính năng
 
 - 3.000 từ riêng biệt, 21 chủ đề, nghĩa tiếng Việt, IPA Anh–Anh/Anh–Mỹ và ví dụ chứa từ.
@@ -70,7 +78,7 @@ GitHub Pages không chạy backend. Khi cần đăng nhập/đồng bộ, có th
 
 ## GitHub → Vercel
 
-Import repository vào Vercel hoặc chạy Vercel CLI, rồi kết nối Git:
+Repository đã được import trực tiếp vào Vercel và kết nối Git thành công. Các lệnh sau dành cho trường hợp triển khai sang một tài khoản hoặc dự án khác:
 
     npx vercel --prod
     npx vercel git connect https://github.com/ledatsuccess2003/vuatienganh.git
