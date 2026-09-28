@@ -1,0 +1,22 @@
+name: Website quality
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run validate
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Start production preview
+        run: npm run preview -- --port 5194 > /tmp/vua-preview.log 2>&1 &
+      - run: npm run test:e2e

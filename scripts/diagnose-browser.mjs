@@ -1,0 +1,12 @@
+import {chromium} from '@playwright/test';
+const browser=await chromium.launch({executablePath:'C:/Users/ADMIN/AppData/Local/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-win64/chrome-headless-shell.exe'});
+const context=await browser.newContext(),page=await context.newPage();
+page.on('pageerror',e=>console.log('PAGE ERROR',e.message));
+page.on('console',m=>{if(m.type()==='error')console.log('CONSOLE',m.text());});
+page.on('requestfailed',r=>console.log('FAILED',r.url(),r.failure()?.errorText));
+await page.goto('http://127.0.0.1:5194/');await page.getByRole('button',{name:'Bắt đầu phiêu lưu'}).waitFor();
+await page.evaluate(async()=>{await navigator.serviceWorker.ready;});await page.waitForFunction(()=>navigator.serviceWorker.controller);
+console.log('CACHE',await page.evaluate(async()=>({controller:navigator.serviceWorker.controller?.scriptURL,keys:await caches.keys(),assets:await caches.open((await caches.keys())[0]).then(async c=>(await c.keys()).map(r=>r.url))})));
+await context.setOffline(true);await page.reload();await page.waitForTimeout(1500);
+console.log('OFFLINE',await page.locator('body').innerText());
+await context.setOffline(false);await browser.close();

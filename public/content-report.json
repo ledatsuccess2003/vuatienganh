@@ -1,0 +1,167 @@
+{
+  "total": 3000,
+  "unique": 3000,
+  "ipaUK": 3000,
+  "ipaUS": 3000,
+  "examples": 3000,
+  "editorial": 59,
+  "imported": 2941,
+  "humanReviewed": false,
+  "excluded": 1672,
+  "sha256": "0d9b688764ee3f88ed77dae21dc9bf09c96031b8d162213148504b1dce39b8c5",
+  "sourceHashes": {
+    "dictionary.db": "2b65bea9577c2a4149caa90940c806f321d1c6cfac503ed8bbd9f93e43a0033a",
+    "en_UK.txt": "221394caef0cf723b4f2df81a98ac33191293257b88aed5b1fb89466d3a0dc77",
+    "en_US.txt": "2af6f154a5c363275f052d1f85acedef38ed185ca9745aa4314be77f6b70de67",
+    "frequency.txt": "d6b3e04f1ac30be6525d41474166c0bff28486ecd8c48dcb0ab9c7c9cc05ed86"
+  },
+  "topics": [
+    {
+      "id": "education",
+      "name": "Giáo dục",
+      "icon": "GraduationCap",
+      "description": "Học tập, trường học và kỹ năng",
+      "count": 47
+    },
+    {
+      "id": "environment",
+      "name": "Môi trường",
+      "icon": "Leaf",
+      "description": "Thiên nhiên và phát triển bền vững",
+      "count": 49
+    },
+    {
+      "id": "technology",
+      "name": "Công nghệ",
+      "icon": "Cpu",
+      "description": "Thế giới số và sự đổi mới",
+      "count": 48
+    },
+    {
+      "id": "health",
+      "name": "Sức khỏe",
+      "icon": "HeartPulse",
+      "description": "Y tế, thể chất và tinh thần",
+      "count": 56
+    },
+    {
+      "id": "society",
+      "name": "Xã hội",
+      "icon": "Users",
+      "description": "Cộng đồng, bình đẳng và dân số",
+      "count": 50
+    },
+    {
+      "id": "work",
+      "name": "Công việc",
+      "icon": "Briefcase",
+      "description": "Nghề nghiệp và môi trường làm việc",
+      "count": 55
+    },
+    {
+      "id": "economy",
+      "name": "Kinh tế",
+      "icon": "TrendingUp",
+      "description": "Kinh doanh, tài chính và thương mại",
+      "count": 67
+    },
+    {
+      "id": "government",
+      "name": "Chính sách",
+      "icon": "Landmark",
+      "description": "Nhà nước và quyền công dân",
+      "count": 56
+    },
+    {
+      "id": "travel",
+      "name": "Du lịch & giao thông",
+      "icon": "Plane",
+      "description": "Đi lại, trải nghiệm và kết nối",
+      "count": 71
+    },
+    {
+      "id": "science",
+      "name": "Khoa học",
+      "icon": "FlaskConical",
+      "description": "Nghiên cứu và khám phá",
+      "count": 68
+    },
+    {
+      "id": "arts",
+      "name": "Văn hóa & nghệ thuật",
+      "icon": "Palette",
+      "description": "Sáng tạo, nghệ thuật và bản sắc",
+      "count": 62
+    },
+    {
+      "id": "food",
+      "name": "Ẩm thực",
+      "icon": "Utensils",
+      "description": "Thực phẩm, dinh dưỡng và nông nghiệp",
+      "count": 72
+    },
+    {
+      "id": "home",
+      "name": "Nhà ở & đô thị",
+      "icon": "House",
+      "description": "Không gian sống và phát triển đô thị",
+      "count": 57
+    },
+    {
+      "id": "media",
+      "name": "Truyền thông",
+      "icon": "Newspaper",
+      "description": "Tin tức, mạng xã hội và quảng cáo",
+      "count": 60
+    },
+    {
+      "id": "sports",
+      "name": "Thể thao",
+      "icon": "Trophy",
+      "description": "Vận động, thi đấu và sở thích",
+      "count": 66
+    },
+    {
+      "id": "relationships",
+      "name": "Con người & cảm xúc",
+      "icon": "Smile",
+      "description": "Giao tiếp, tính cách và quan hệ",
+      "count": 75
+    },
+    {
+      "id": "academic",
+      "name": "Ngôn ngữ học thuật",
+      "icon": "BookOpen",
+      "description": "Lập luận, phân tích và trình bày ý tưởng",
+      "count": 99
+    },
+    {
+      "id": "nature",
+      "name": "Thiên nhiên & động vật",
+      "icon": "TreePine",
+      "description": "Địa lý, động vật và cảnh quan",
+      "count": 73
+    },
+    {
+      "id": "law",
+      "name": "Pháp luật & an toàn",
+      "icon": "ShieldCheck",
+      "description": "Công lý, an ninh và an toàn",
+      "count": 56
+    },
+    {
+      "id": "global",
+      "name": "Thế giới & tương lai",
+      "icon": "Globe",
+      "description": "Quan hệ quốc tế và sự thay đổi",
+      "count": 41
+    },
+    {
+      "id": "daily",
+      "name": "Đời sống hằng ngày",
+      "icon": "Coffee",
+      "description": "Từ nền tảng để giao tiếp mỗi ngày",
+      "count": 1772
+    }
+  ]
+}
