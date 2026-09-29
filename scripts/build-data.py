@@ -111,6 +111,7 @@ freq=(source/'frequency.txt').read_text().splitlines();rank={w:i for i,w in enum
 candidate=list(dict.fromkeys(list(overrides)+list(topic_for)+freq))
 bad=re.compile(r'^(A|An|The) \w+ (helped the team|was important|is important)|She saw the|He saw the|We discussed the word|This is a|They mentioned|It is a',re.I)
 pos_names={'N':'noun','V':'verb','A':'adjective','D':'adverb','noun':'noun','verb':'verb','adjective':'adjective','adverb':'adverb'}
+grammar_only=re.compile(r'^(?:Động từ chia|Quá khứ và phân từ|Số nhiều của|Dạng phân từ|Dạng quá khứ|Phân từ quá khứ|Tính từ so sánh)',re.I)
 entries=[];excluded=[]
 for word in candidate:
  if not re.fullmatch('[a-z][a-z-]{1,24}',word) or word not in uk or word not in us:continue
@@ -120,7 +121,7 @@ for word in candidate:
   if not example or len(example.split())<6 or len(example)>230 or not re.search(r'\b'+re.escape(word)+r'\b',example,re.I):continue
   if bad.search(example) or not meaning or not meaning.strip().strip('.') or len(meaning)>160 or re.search(r'\([^)]*(hóa học|sinh vật|y học|địa lý|kỹ thuật|quân sự|nhiếp ảnh|toán học)',meaning,re.I):continue
   if pos not in pos_names:continue
-  score=(100 if pos in ['noun','verb','adjective','adverb'] else 0)-row_index
+  score=(100 if pos in ['noun','verb','adjective','adverb'] else 0)-row_index-(1000 if grammar_only.match(meaning) else 0)
   valid.append((score,meaning.strip().rstrip('.'),pos_names[pos],example.strip()))
  if word in overrides:
   meaning,pos,example,vi,collocation=overrides[word];editorial=True
@@ -140,10 +141,23 @@ for entry in entries:
  if entry['word'] in quality_fixes:
   meaning,pos,example,vi,collocation=quality_fixes[entry['word']]
   entry.update(meaning=meaning,pos=pos,example=example,exampleVi=vi,collocation=collocation,editorial=True,source='editorial',exampleSource='original')
+lemma_repairs=0
+for entry in entries:
+ if not grammar_only.match(entry['meaning']):continue
+ match=re.search(r'của ([a-z]+)',entry['meaning'],re.I)
+ if not match:continue
+ lemma=match.group(1).lower()
+ rows=conn.execute('SELECT d.definition,d.pos FROM words w JOIN word_definitions wd ON w.id=wd.word_id JOIN definitions d ON d.id=wd.definition_id WHERE w.word=? AND d.definition_lang="vi"',(lemma,)).fetchall()
+ choices=[(meaning.strip().rstrip('.'),pos_names[pos]) for meaning,pos in rows if pos in pos_names and meaning and not grammar_only.match(meaning) and 2<len(meaning)<=110 and not meaning.lstrip().startswith('(')]
+ same=[meaning for meaning,pos in choices if pos==entry['pos']]
+ if same:
+  entry['meaning']=same[0]
+  entry['definitionRepair']='base-form'
+  lemma_repairs+=1
 for e in entries:e.pop('rank')
 topics=[{'id':id,'name':name,'icon':icon,'description':desc,'count':sum(e['topic']==id for e in entries)} for id,name,icon,desc,seeds in TOPICS]
 (root/'public/vocabulary.json').write_text(json.dumps(entries,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 (root/'src/topics.json').write_text(json.dumps(topics,ensure_ascii=False,indent=2),encoding='utf-8')
-report={'total':len(entries),'unique':len(set(e['word'] for e in entries)),'ipaUK':len(entries),'ipaUS':len(entries),'examples':len(entries),'editorial':sum(e['editorial'] for e in entries),'imported':sum(not e['editorial'] for e in entries),'humanReviewed':False,'excluded':len(excluded),'sha256':hashlib.sha256((root/'public/vocabulary.json').read_bytes()).hexdigest(),'sourceHashes':{f:hashlib.sha256((source/f).read_bytes()).hexdigest() for f in ['dictionary.db','en_UK.txt','en_US.txt','frequency.txt']},'topics':topics}
+report={'total':len(entries),'unique':len(set(e['word'] for e in entries)),'ipaUK':len(entries),'ipaUS':len(entries),'examples':len(entries),'editorial':sum(e['editorial'] for e in entries),'imported':sum(not e['editorial'] for e in entries),'lemmaRepairs':lemma_repairs,'grammarOnlyRemaining':sum(bool(grammar_only.match(e['meaning'])) for e in entries),'humanReviewed':False,'excluded':len(excluded),'sha256':hashlib.sha256((root/'public/vocabulary.json').read_bytes()).hexdigest(),'sourceHashes':{f:hashlib.sha256((source/f).read_bytes()).hexdigest() for f in ['dictionary.db','en_UK.txt','en_US.txt','frequency.txt']},'topics':topics}
 (root/'public/content-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps({k:v for k,v in report.items() if k not in ['topics','sourceHashes']},ensure_ascii=False));print([(t['id'],t['count']) for t in topics])
