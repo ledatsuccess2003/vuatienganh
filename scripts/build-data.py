@@ -132,6 +132,14 @@ for word in candidate:
 entries.sort(key=lambda e:(0 if e['editorial'] else 1 if e['word'] in topic_for else 2,e['rank']))
 if len(entries)<3000:raise SystemExit(f'Only {len(entries)} eligible headwords, need 3,000. No padding permitted.')
 entries=entries[:3000]
+quality_fixes={}
+for line in (root/'scripts/quality-fixes.tsv').read_text(encoding='utf-8').splitlines():
+ word,meaning,pos,example,vi,collocation=line.split('|')
+ quality_fixes[word]=(meaning,pos,example,vi,collocation)
+for entry in entries:
+ if entry['word'] in quality_fixes:
+  meaning,pos,example,vi,collocation=quality_fixes[entry['word']]
+  entry.update(meaning=meaning,pos=pos,example=example,exampleVi=vi,collocation=collocation,editorial=True,source='editorial',exampleSource='original')
 for e in entries:e.pop('rank')
 topics=[{'id':id,'name':name,'icon':icon,'description':desc,'count':sum(e['topic']==id for e in entries)} for id,name,icon,desc,seeds in TOPICS]
 (root/'public/vocabulary.json').write_text(json.dumps(entries,ensure_ascii=False,separators=(',',':')),encoding='utf-8')

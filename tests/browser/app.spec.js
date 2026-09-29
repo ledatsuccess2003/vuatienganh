@@ -51,5 +51,38 @@ test('responsive pages fit 320px through 1920px and game modal fits small phones
 });
 test('service worker caches complete vocabulary and app remains usable offline',async({page,context})=>{
  await page.evaluate(async()=>{await navigator.serviceWorker.ready;});await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
- await context.setOffline(true);await page.reload();await expect(page.getByRole('button',{name:'Bắt đầu phiêu lưu'})).toBeVisible();await page.getByRole('button',{name:'Bắt đầu phiêu lưu'}).click();await expect(page.locator('.quiz-word')).toBeVisible();await context.setOffline(false);
+ await context.setOffline(true);await page.reload();await expect(page.getByRole('button',{name:'Bắt đầu phiêu lưu'})).toBeVisible();
+ expect(await page.evaluate(async()=>(await document.fonts.load('400 14px "Be Vietnam Pro"')).length)).toBeGreaterThan(0);
+ await page.getByRole('button',{name:'Bắt đầu phiêu lưu'}).click();await expect(page.locator('.quiz-word')).toBeVisible();await context.setOffline(false);
+});
+test('fixed install action opens clear guidance, accepts browser prompt, and leaves mobile navigation usable',async({page})=>{
+ await page.setViewportSize({width:320,height:700});
+ const bar=page.locator('.install-bar');await expect(bar).toBeVisible();
+ const nav=page.locator('.mobile-bottom');
+ const bounds=await Promise.all([bar.boundingBox(),nav.boundingBox()]);
+ expect(bounds[0].y+bounds[0].height).toBeLessThanOrEqual(bounds[1].y+2);
+ await page.getByRole('button',{name:'Tải app',exact:true}).click();
+ await expect(page.getByRole('dialog',{name:'Tải app Vua Tiếng Anh'})).toContainText('Thêm vào Màn hình chính');
+ await page.getByRole('button',{name:'Đã hiểu'}).click();
+ await page.evaluate(()=>{const offer=new Event('beforeinstallprompt',{cancelable:true});offer.prompt=()=>{window.pwaPrompted=true;return Promise.resolve();};offer.userChoice=Promise.resolve({outcome:'accepted'});window.dispatchEvent(offer);});
+ await page.getByRole('button',{name:'Tải app',exact:true}).click();
+ expect(await page.evaluate(()=>window.pwaPrompted)).toBe(true);
+ await page.evaluate(()=>window.dispatchEvent(new Event('appinstalled')));
+ await expect(bar).toHaveCount(0);
+ await nav.getByRole('button',{name:'Game'}).click();await expect(page.getByRole('heading',{name:'Sân chơi từ vựng'})).toBeVisible();
+});
+test('every learning page stays within phone, tablet, and laptop viewports',async({page})=>{
+ test.setTimeout(90000);
+ const labels=['E-book A','Học qua game','Flashcards','Kho từ vựng','Ôn tập hôm nay','Từ yêu thích','Luyện phát âm','Cài đặt'];
+ const errors=[];page.on('pageerror',error=>errors.push(error.message));
+ for(const width of [320,390,768,1024,1440]){
+  await page.setViewportSize({width,height:800});
+  for(const label of labels){
+   if(width<=760)await page.getByRole('button',{name:'Mở menu'}).click();
+   await page.locator('.sidebar').getByRole('button',{name:label}).click();
+   const size=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
+   expect(size.scroll,`${label} overflows at ${width}px`).toBeLessThanOrEqual(size.client);
+  }
+ }
+ expect(errors).toEqual([]);
 });
